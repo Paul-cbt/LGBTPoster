@@ -116,10 +116,12 @@ class _HomeState extends State<Home> {
                   Lesbian(),
                   Gay(),
                   Bisexual(),
-                  SingleChildScrollView(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [Trans(), TransSexual()],
+                  Center(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [Trans(), TransSexual()],
+                      ),
                     ),
                   ),
                   Queer(),
