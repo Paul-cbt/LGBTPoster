@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 
 import 'package:shimmer/shimmer.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Letter extends StatefulWidget {
   final Function action;
@@ -91,81 +92,97 @@ class _LetterState extends State<Letter> {
       }
     }
 
-    return InkWell(
-      radius: 100,
-      onTap: () {
-        widget.action();
-      },
-      child: Container(
-        height: wantedHeight - (0.1 * wantedHeight),
-        width: wantedWidth - (0.1 * wantedWidth),
-        child: Stack(
-          clipBehavior: Clip.hardEdge,
-          children: [
-            Container(height: wantedHeight, width: wantedWidth),
-            Padding(
-              padding: widget.letter == "plus"
-                  ? EdgeInsets.symmetric(
-                      horizontal: wantedWidth * 0.03,
-                      vertical: wantedHeight * 0.03)
-                  : EdgeInsets.symmetric(
-                      horizontal: wantedWidth * widthPercentage,
-                      vertical: wantedHeight * heightPercentage),
-              child: Container(
-                alignment: Alignment.bottomLeft,
-                child: Hero(
-                  tag: widget.letter,
-                  child: kIsWeb
-                      ? CachedNetworkImage(
-                          placeholder: (context, url) {
-                            return Shimmer.fromColors(
-                              period: Duration(milliseconds: 700),
-                              child: Container(
-                                color: Colors.grey,
+    return Container(
+      height: widget.letter == "plus" && widget.optionalHeight == 100
+          ? (wantedHeight - (0.1 * wantedHeight)) * 2
+          : wantedHeight - (0.1 * wantedHeight),
+      width: wantedWidth - (0.1 * wantedWidth),
+      child: Column(
+        children: [
+          InkWell(
+            radius: 100,
+            onTap: () {
+              widget.action();
+            },
+            child: Container(
+              height: wantedHeight - (0.1 * wantedHeight),
+              width: wantedWidth - (0.1 * wantedWidth),
+              child: ClipRRect(
+                clipBehavior: Clip.hardEdge,
+                child: Stack(
+                  clipBehavior: Clip.hardEdge,
+                  children: [
+                    Container(height: wantedHeight, width: wantedWidth),
+                    Padding(
+                      padding: widget.letter == "plus"
+                          ? EdgeInsets.symmetric(
+                              horizontal: wantedWidth * 0.03,
+                              vertical: wantedHeight * 0.03)
+                          : EdgeInsets.symmetric(
+                              horizontal: wantedWidth * widthPercentage,
+                              vertical: wantedHeight * heightPercentage),
+                      child: Container(
+                        alignment: Alignment.topCenter,
+                        child: kIsWeb
+                            ? CachedNetworkImage(
+                                placeholder: (context, url) {
+                                  return Shimmer.fromColors(
+                                    period: Duration(milliseconds: 700),
+                                    child: Container(
+                                      color: Colors.grey,
+                                    ),
+                                    baseColor: Colors.grey[300] ?? Colors.grey,
+                                    highlightColor:
+                                        Colors.grey[100] ?? Colors.grey,
+                                  );
+                                },
+                                imageUrl: "assets/${widget.imagePath}",
+                                height: wantedHeight,
+                                width: wantedWidth,
+                                fit: BoxFit.cover,
+                              )
+                            : Image.asset(
+                                "assets/${widget.imagePath}",
+                                height: wantedHeight,
+                                width: wantedWidth,
+                                fit: BoxFit.cover,
                               ),
-                              baseColor: Colors.grey[300] ?? Colors.grey,
-                              highlightColor: Colors.grey[100] ?? Colors.grey,
-                            );
-                          },
-                          imageUrl: "assets/${widget.imagePath}",
-                          height: wantedHeight,
-                          width: wantedWidth,
-                          fit: BoxFit.cover,
-                        )
-                      : Image.asset(
-                          "assets/${widget.imagePath}",
-                          height: wantedHeight,
-                          width: wantedWidth,
-                          fit: BoxFit.cover,
-                        ),
+                      ),
+                    ),
+                    kIsWeb
+                        ? CachedNetworkImage(
+                            placeholder: (context, url) {
+                              return Shimmer.fromColors(
+                                period: Duration(milliseconds: 700),
+                                child: Container(
+                                  color: Colors.grey,
+                                ),
+                                baseColor: Colors.grey[300] ?? Colors.grey,
+                                highlightColor: Colors.grey[100] ?? Colors.grey,
+                              );
+                            },
+                            imageUrl: widget.letter == "plus"
+                                ? "assets/plus2.png"
+                                : "assets/${widget.letter.toUpperCase()}.png",
+                            height: wantedHeight,
+                            fit: BoxFit.fitHeight,
+                          )
+                        : Image.asset(
+                            "assets/${widget.letter.toUpperCase()}.png",
+                            height: wantedHeight,
+                            fit: BoxFit.fitHeight,
+                          ),
+                  ],
                 ),
               ),
             ),
-            kIsWeb
-                ? CachedNetworkImage(
-                    placeholder: (context, url) {
-                      return Shimmer.fromColors(
-                        period: Duration(milliseconds: 700),
-                        child: Container(
-                          color: Colors.grey,
-                        ),
-                        baseColor: Colors.grey[300] ?? Colors.grey,
-                        highlightColor: Colors.grey[100] ?? Colors.grey,
-                      );
-                    },
-                    imageUrl: "assets/${widget.letter.toUpperCase()}.png",
-                    height: wantedHeight,
-                    width: wantedWidth,
-                    fit: BoxFit.fill,
-                  )
-                : Image.asset(
-                    "assets/${widget.letter.toUpperCase()}.png",
-                    height: wantedHeight,
-                    width: wantedWidth,
-                    fit: BoxFit.fill,
-                  ),
-          ],
-        ),
+          ),
+          if (widget.letter == "plus" && widget.optionalHeight == 100)
+            Container(
+              height: wantedHeight - (0.1 * wantedHeight),
+              width: wantedWidth - (0.1 * wantedWidth),
+            )
+        ],
       ),
     );
   }
