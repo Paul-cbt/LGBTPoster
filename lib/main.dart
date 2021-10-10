@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lgbtposter/B.dart';
-import 'package:lgbtposter/G.dart';
-import 'package:lgbtposter/L.dart';
+import 'package:universal_html/html.dart';
 import 'package:lgbtposter/descs/asexual.dart';
 import 'package:lgbtposter/descs/bi.dart';
 import 'package:lgbtposter/descs/intersex.dart';
@@ -52,6 +50,16 @@ class _HomeState extends State<Home> {
   int page = 0;
   double height = 200;
   PageController pageController = PageController(initialPage: 0);
+  @override
+  void initState() {
+    final loader = document.getElementsByClassName('loader');
+    if (loader.isNotEmpty) {
+      loader.first.remove();
+      //remove the loading in the html file
+    }
+    super.initState();
+  }
+
   void changeAlignment(int letter) {
     setState(() {
       isShown = true;
@@ -83,7 +91,10 @@ class _HomeState extends State<Home> {
               padding:
                   EdgeInsets.only(top: MediaQuery.of(context).size.width / 90),
               alignment: Alignment.topCenter,
-              child: Text("que significa las letras del sigle LGBTQIA+ ? "),
+              child: Text(
+                "que significa las letras del sigle LGBTQIA+ ? ",
+                textAlign: TextAlign.center,
+              ),
             ),
             Container(
               margin: EdgeInsets.only(
@@ -97,14 +108,19 @@ class _HomeState extends State<Home> {
                   Container(
                     child: Center(
                       child: Text(
-                          "para saber más, tienen que cliquear las letras !"),
+                        "para saber más, tienen que cliquear las letras !",
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                   ),
                   Lesbian(),
                   Gay(),
                   Bisexual(),
-                  Column(
-                    children: [Trans(), TransSexual()],
+                  SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [Trans(), TransSexual()],
+                    ),
                   ),
                   Queer(),
                   Intersex(),
@@ -118,7 +134,8 @@ class _HomeState extends State<Home> {
               duration: Duration(milliseconds: 500),
               child: Container(
                 margin: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).size.width / 5),
+                  bottom: MediaQuery.of(context).size.height / 15,
+                ),
                 child: Wrap(
                   alignment: WrapAlignment.center,
                   spacing: 10,
@@ -127,11 +144,15 @@ class _HomeState extends State<Home> {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        ZoomableL(
-                          action: () {
-                            changeAlignment(1);
-                          },
-                        ),
+                        Letter(
+                            action: () {
+                              changeAlignment(1);
+                            },
+                            letter: "l",
+                            height: 263,
+                            optionalHeight: height,
+                            width: 197,
+                            imagePath: "lesbian.jpg"),
                         SizedBox(
                           height: 10,
                         ),
@@ -153,9 +174,15 @@ class _HomeState extends State<Home> {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        ZoomableG(action: () {
-                          changeAlignment(2);
-                        }),
+                        Letter(
+                            action: () {
+                              changeAlignment(2);
+                            },
+                            optionalHeight: height,
+                            letter: "g",
+                            height: 261,
+                            width: 241,
+                            imagePath: "gay.jpg"),
                         SizedBox(
                           height: 10,
                         ),
@@ -177,9 +204,15 @@ class _HomeState extends State<Home> {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        ZoomableB(action: () {
-                          changeAlignment(3);
-                        }),
+                        Letter(
+                            action: () {
+                              changeAlignment(3);
+                            },
+                            optionalHeight: height,
+                            letter: "b",
+                            height: 261,
+                            width: 223,
+                            imagePath: "bi.jpg"),
                         SizedBox(
                           height: 10,
                         ),
@@ -203,6 +236,7 @@ class _HomeState extends State<Home> {
                             action: () {
                               changeAlignment(4);
                             },
+                            optionalHeight: height,
                             letter: "t",
                             height: 259,
                             width: 238,
@@ -230,6 +264,7 @@ class _HomeState extends State<Home> {
                             action: () {
                               changeAlignment(5);
                             },
+                            optionalHeight: height,
                             letter: "q",
                             height: 292,
                             width: 268,
@@ -257,6 +292,7 @@ class _HomeState extends State<Home> {
                             action: () {
                               changeAlignment(6);
                             },
+                            optionalHeight: height,
                             letter: "i",
                             height: 275,
                             width: 64,
@@ -284,6 +320,7 @@ class _HomeState extends State<Home> {
                             action: () {
                               changeAlignment(7);
                             },
+                            optionalHeight: height,
                             letter: "a",
                             height: 272,
                             width: 274,
@@ -315,7 +352,7 @@ class _HomeState extends State<Home> {
                           height: 154,
                           width: 154,
                           imagePath: "plus.jpg",
-                          optionalHeight: 100,
+                          optionalHeight: height / 2,
                         ),
                         SizedBox(
                           height: height - 100 + 10,

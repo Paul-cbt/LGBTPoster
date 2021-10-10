@@ -24,6 +24,12 @@ class _InfoState extends State<Info> {
   double fontSize = 15;
   @override
   Widget build(BuildContext context) {
+    if (MediaQuery.of(context).size.height * MediaQuery.of(context).size.width <
+        317400) {
+      fontSize = 12;
+    } else {
+      fontSize = 15;
+    }
     return Center(
       child: Container(
           padding: EdgeInsets.all(8),
@@ -40,7 +46,8 @@ class _InfoState extends State<Info> {
                     height: widget.height,
                     width: widget.width,
                     imagePath: widget.imagePath,
-                    optionalHeight: fontSize + 10,
+                    optionalHeight:
+                        fontSize + (widget.letter != "plus" ? 10 : 2),
                   ),
                 ),
                 if (widget.letter == "b")
@@ -55,7 +62,7 @@ class _InfoState extends State<Info> {
                   )),
                 TextSpan(
                   text: widget.text,
-                  style: TextStyle(fontSize: fontSize),
+                  style: TextStyle(fontSize: fontSize, color: Colors.black),
                 )
               ]))),
     );
