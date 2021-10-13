@@ -110,7 +110,7 @@ class _HomeState extends State<Home> {
                     top: MediaQuery.of(context).size.width / 90),
                 alignment: Alignment.topCenter,
                 child: Text(
-                  "que significan las letras del sigle LGBTQIA+ ? ",
+                  "que significan las letras dela siglas LGBTQIA+ ? ",
                   textAlign: TextAlign.center,
                 ),
               ),
